@@ -16,14 +16,19 @@ const fetchBreedInfo = function(breed, callback) {
         } else {
           callback('Breed not found', null);
         }
+        //Edge case:Request Failed
       } else {
         console.error('Request failed with status code:', response.statusCode);
-        callback(response.statusCode, null);
+        const errorMessage = 'Request failed with status code: ${response.statusCode}';
+        callback(errorMessage, null);
       }
     }
   });
 };
+//Retirve breed name from command-line arguments
 const breedName = process.argv[2];
+
+//checking if breed name is provided
 if (breedName) {
   fetchBreedInfo(breedName, (error, data) => {
     if (error) {
