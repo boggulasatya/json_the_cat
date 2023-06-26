@@ -1,6 +1,6 @@
 const request = require('request');
 
-const fetchBreedInfo = function(breed, callback) {
+const fetchBreedDescription = function(breed, callback) {
   const apiUrl = 'https://api.thecatapi.com/v1';
   const breedEndpoint = `${apiUrl}/breeds/search?q=${breed}`;
   
@@ -12,7 +12,8 @@ const fetchBreedInfo = function(breed, callback) {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         const data = JSON.parse(body);
         if (data.length > 0) {
-          callback(null, data);
+          const description = data[0].description || '';
+          callback(null, description);
         } else {
           callback('Breed not found', null);
         }
@@ -25,18 +26,4 @@ const fetchBreedInfo = function(breed, callback) {
     }
   });
 };
-//Retirve breed name from command-line arguments
-const breedName = process.argv[2];
-
-//checking if breed name is provided
-if (breedName) {
-  fetchBreedInfo(breedName, (error, data) => {
-    if (error) {
-      console.log('Error', error);
-    } else {
-      console.log('Breed information:', data);
-    }
-  });
-} else {
-  console.log('Please provide a breed name as a command-line argument.');
-}
+module.exports = { fetchBreedDescription };
